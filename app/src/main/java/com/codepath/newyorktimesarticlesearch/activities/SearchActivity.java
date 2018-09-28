@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -46,12 +47,14 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
         setupViews();
     }
 
     private void setupViews() {
+        Toolbar toolbar = findViewById(R.id.toolbar_search_activity);
+        setSupportActionBar(toolbar);
+
         etQuery = findViewById(R.id.etQuery);
         gvResults = findViewById(R.id.gvResults);
         btnSearch = findViewById(R.id.btnSearch);
@@ -70,29 +73,11 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_search, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+    // Action Handler
 
     public void onArticleSearch(View view) {
+        dismissKeyboard();
+
         String query = etQuery.getText().toString();
 
         AsyncHttpClient client = new AsyncHttpClient();
@@ -115,6 +100,36 @@ public class SearchActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    // Toolbar
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_filter, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_filter:
+                launchFilterActivity();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    // Private Methods
+
+    private void launchFilterActivity() {
+        Intent i = new Intent(this, FilterActivity.class);
+//        Book book = mBooks.get(position);
+//        i.putExtra("book", book);
+        startActivity(i);
+
     }
 
     private void dismissKeyboard() {

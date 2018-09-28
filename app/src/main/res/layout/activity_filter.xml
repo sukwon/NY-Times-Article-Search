@@ -14,7 +14,7 @@
         android:layout_marginTop="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Begin Date" />
+        android:text="@string/begin_Date" />
 
     <TextView
         android:id="@+id/tvSortOrder"
@@ -24,7 +24,7 @@
         android:layout_marginTop="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvBeginDate"
-        tools:text="Sort Order" />
+        android:text="@string/sort_order" />
 
     <TextView
         android:id="@+id/tvNewsDeskValues"
@@ -34,7 +34,7 @@
         android:layout_marginTop="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvSortOrder"
-        tools:text="News Desk Values" />
+        android:text="@string/news_desk_values" />
 
 
     <EditText
@@ -45,11 +45,11 @@
         android:layout_marginStart="32dp"
         android:clickable="true"
         android:focusable="false"
+        android:onClick="showDatePickerDialog"
+        app:layout_constraintBottom_toBottomOf="@+id/tvBeginDate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvBeginDate"
-        tools:layout_editor_absoluteY="30dp"
-        app:layout_constraintTop_toTopOf="@+id/tvBeginDate"
-        app:layout_constraintBottom_toBottomOf="@+id/tvBeginDate" />
+        app:layout_constraintTop_toTopOf="@+id/tvBeginDate" />
 
     <EditText
         android:id="@+id/etSortOrder"
@@ -99,7 +99,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/cbArts"
         app:layout_constraintStart_toEndOf="@+id/cbArts"
         app:layout_constraintTop_toTopOf="@+id/cbArts"
-        tools:text="Arts" />
+        android:text="@string/arts" />
 
     <TextView
         android:id="@+id/tvFashionStyle"
@@ -108,13 +108,13 @@
         app:layout_constraintBottom_toBottomOf="@+id/cbFashionStyles"
         app:layout_constraintStart_toStartOf="@+id/tvArts"
         app:layout_constraintTop_toTopOf="@+id/cbFashionStyles"
-        tools:text="Fashion &amp; Style" />
+        android:text="@string/fashion_and_styles" />
 
     <TextView
         android:id="@+id/tvSports"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sports"
+        android:text="@string/sports"
         app:layout_constraintBottom_toBottomOf="@+id/cbSports"
         app:layout_constraintStart_toStartOf="@+id/tvFashionStyle"
         app:layout_constraintTop_toTopOf="@+id/cbSports" />
