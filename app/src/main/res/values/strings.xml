@@ -11,4 +11,6 @@
     <string name="arts">Arts</string>
     <string name="fashion_and_styles">Fashion &amp; Styles</string>
     <string name="sports">Sports</string>
+    <string name="apply">Apply</string>
+    <string name="clear">Clear</string>
 </resources>

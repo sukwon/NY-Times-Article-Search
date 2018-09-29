@@ -119,4 +119,25 @@
         app:layout_constraintStart_toStartOf="@+id/tvFashionStyle"
         app:layout_constraintTop_toTopOf="@+id/cbSports" />
 
+    <Button
+        android:id="@+id/btnClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/clear"
+        android:onClick="onClickClearBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cbSports" />
+
+    <Button
+        android:id="@+id/btnApply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:text="@string/apply"
+        android:onClick="onClickApplyBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnClear" />
+
 </android.support.constraint.ConstraintLayout>

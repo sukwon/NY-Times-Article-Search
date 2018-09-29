@@ -33,4 +33,12 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
     }
+
+    // Action Handler
+
+    public void onClickClearBtn(View view) {
+    }
+
+    public void onClickApplyBtn(View view) {
+    }
 }

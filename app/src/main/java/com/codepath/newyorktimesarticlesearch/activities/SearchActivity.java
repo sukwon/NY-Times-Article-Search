@@ -19,6 +19,7 @@ import android.widget.GridView;
 import com.codepath.newyorktimesarticlesearch.R;
 import com.codepath.newyorktimesarticlesearch.adapters.ArticleArrayAdapter;
 import com.codepath.newyorktimesarticlesearch.models.Article;
+import com.codepath.newyorktimesarticlesearch.models.Filter;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -42,13 +43,20 @@ public class SearchActivity extends AppCompatActivity {
 
     ArrayList<Article> articles;
     ArticleArrayAdapter adapter;
+    Filter filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        setupModels();
         setupViews();
+    }
+
+    private void setupModels() {
+        articles = new ArrayList<>();
+        filter = new Filter();
     }
 
     private void setupViews() {
@@ -58,17 +66,13 @@ public class SearchActivity extends AppCompatActivity {
         etQuery = findViewById(R.id.etQuery);
         gvResults = findViewById(R.id.gvResults);
         btnSearch = findViewById(R.id.btnSearch);
-        articles = new ArrayList<>();
         adapter = new ArticleArrayAdapter(this, articles);
         gvResults.setAdapter(adapter);
 
         gvResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getApplicationContext(), ArticleActivity.class);
-                Article article = articles.get(position);
-                i.putExtra("article", article);
-                startActivity(i);
+                launchArticleActivity(position);
             }
         });
     }
@@ -85,6 +89,9 @@ public class SearchActivity extends AppCompatActivity {
         params.put("api-key", apiKey);
         params.put("page", 0);
         params.put("q", query);
+        params.put("begin_date", filter.getBeginDate());
+        params.put("sort", filter.getSortOrder());
+        params.put("news_desk", filter.getNewsDeskValues());
 
         client.get(baseURL, params, new JsonHttpResponseHandler() {
             @Override
@@ -122,15 +129,23 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-    // Private Methods
+    // Navigation
+
+    private void launchArticleActivity(int position) {
+        Intent i = new Intent(getApplicationContext(), ArticleActivity.class);
+        Article article = articles.get(position);
+        i.putExtra("article", article);
+        startActivity(i);
+    }
 
     private void launchFilterActivity() {
         Intent i = new Intent(this, FilterActivity.class);
 //        Book book = mBooks.get(position);
 //        i.putExtra("book", book);
         startActivity(i);
-
     }
+
+    // Private Methods
 
     private void dismissKeyboard() {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
