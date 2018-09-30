@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
@@ -40,9 +41,30 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
     private void updateViewsWithFilter() {
         setBeginDate(filter.getBeginDate());
         setSortOrder(filter.getSortOrder());
+        setNewsDeskValues(filter.getNewsDeskValues());
     }
 
     // News Desk Values
+
+    private void setNewsDeskValues(ArrayList<SearchFilter.NewsDeskValues> newsDeskValues) {
+        CheckBox cbArts = findViewById(R.id.cbArts);
+        CheckBox cbFashionStyles = findViewById(R.id.cbFashionStyles);
+        CheckBox cbSports = findViewById(R.id.cbSports);
+
+        cbArts.setChecked(false);
+        cbFashionStyles.setChecked(false);
+        cbSports.setChecked(false);
+
+        for (SearchFilter.NewsDeskValues v: newsDeskValues) {
+            if (v.equals(SearchFilter.NewsDeskValues.ARTS)) {
+                cbArts.setChecked(true);
+            } else if (v.equals(SearchFilter.NewsDeskValues.FASHION_AND_STYLES)) {
+                cbFashionStyles.setChecked(true);
+            } else if (v.equals(SearchFilter.NewsDeskValues.SPORTS)) {
+                cbSports.setChecked(true);
+            }
+        }
+    }
 
     // Sort Order
 
