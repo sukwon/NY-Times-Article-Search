@@ -1,5 +1,7 @@
 package com.codepath.newyorktimesarticlesearch.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 
 import java.text.SimpleDateFormat;
@@ -7,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Filter {
+public class SearchFilter implements Parcelable {
 
     enum SortOrder {
         OLDEST,
@@ -32,15 +34,20 @@ public class Filter {
         }
     }
 
-    Date beginDate;
-    SortOrder sortOrder;
-    ArrayList<NewsDeskValues> newsDeskValues;
-
     private static int YEARS_BEFORE_THRESHOLD = -30;
     private static String OLDEST = "oldest";
     private static String NEWEST = "newest";
 
-    public Filter() {
+    private Date beginDate;
+    private SortOrder sortOrder;
+    private ArrayList<NewsDeskValues> newsDeskValues;
+
+    public SearchFilter() {
+        reset();
+    }
+
+
+    public void reset() {
         Date date = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -76,5 +83,37 @@ public class Filter {
     public String getNewsDeskValues() {
         String joined = TextUtils.join(", ", newsDeskValues);
         return "(" + joined + ")";
+    }
+
+    // Parcelable
+
+    protected SearchFilter(Parcel in) {
+        beginDate = (java.util.Date) in.readSerializable();
+        sortOrder = (SortOrder) in.readSerializable();
+        newsDeskValues = (ArrayList<NewsDeskValues>) in.readSerializable();
+    }
+
+    public static final Creator<SearchFilter> CREATOR = new Creator<SearchFilter>() {
+        @Override
+        public SearchFilter createFromParcel(Parcel in) {
+            return new SearchFilter(in);
+        }
+
+        @Override
+        public SearchFilter[] newArray(int size) {
+            return new SearchFilter[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeSerializable(beginDate);
+        dest.writeSerializable(sortOrder);
+        dest.writeSerializable(newsDeskValues);
     }
 }

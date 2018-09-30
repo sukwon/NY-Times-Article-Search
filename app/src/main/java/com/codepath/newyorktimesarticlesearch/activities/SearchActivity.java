@@ -19,7 +19,7 @@ import android.widget.GridView;
 import com.codepath.newyorktimesarticlesearch.R;
 import com.codepath.newyorktimesarticlesearch.adapters.ArticleArrayAdapter;
 import com.codepath.newyorktimesarticlesearch.models.Article;
-import com.codepath.newyorktimesarticlesearch.models.Filter;
+import com.codepath.newyorktimesarticlesearch.models.SearchFilter;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -34,16 +34,17 @@ import cz.msebera.android.httpclient.Header;
 
 public class SearchActivity extends AppCompatActivity {
 
-    private static String baseURL = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
-    private static String apiKey = "6475b9261bb44f24a931b9088cc1c8d7";
+    private static String BASE_URL = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+    private static String API_KEY = "6475b9261bb44f24a931b9088cc1c8d7";
+    private final int FILTER_ACTIVITY_REQUEST_CODE = 20;
 
     EditText etQuery;
     GridView gvResults;
     Button btnSearch;
 
-    ArrayList<Article> articles;
-    ArticleArrayAdapter adapter;
-    Filter filter;
+    private ArrayList<Article> articles;
+    private ArticleArrayAdapter adapter;
+    private SearchFilter filter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,7 @@ public class SearchActivity extends AppCompatActivity {
 
     private void setupModels() {
         articles = new ArrayList<>();
-        filter = new Filter();
+        filter = new SearchFilter();
     }
 
     private void setupViews() {
@@ -86,14 +87,14 @@ public class SearchActivity extends AppCompatActivity {
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        params.put("api-key", apiKey);
+        params.put("api-key", API_KEY);
         params.put("page", 0);
         params.put("q", query);
         params.put("begin_date", filter.getBeginDate());
         params.put("sort", filter.getSortOrder());
         params.put("news_desk", filter.getNewsDeskValues());
 
-        client.get(baseURL, params, new JsonHttpResponseHandler() {
+        client.get(BASE_URL, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("DEBUG", response.toString());
@@ -140,8 +141,8 @@ public class SearchActivity extends AppCompatActivity {
 
     private void launchFilterActivity() {
         Intent i = new Intent(this, FilterActivity.class);
-//        Book book = mBooks.get(position);
-//        i.putExtra("book", book);
+        i.putExtra("filter", filter);
+//        startActivityForResult(i, FILTER_ACTIVITY_REQUEST_CODE);
         startActivity(i);
     }
 

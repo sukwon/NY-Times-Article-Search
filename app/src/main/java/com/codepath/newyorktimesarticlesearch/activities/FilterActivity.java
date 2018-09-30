@@ -8,15 +8,20 @@ import android.widget.DatePicker;
 
 import com.codepath.newyorktimesarticlesearch.R;
 import com.codepath.newyorktimesarticlesearch.fragments.DatePickerFragment;
+import com.codepath.newyorktimesarticlesearch.models.SearchFilter;
 
 import java.util.Calendar;
 
 public class FilterActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
+    private SearchFilter filter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
+
+        filter = getIntent().getParcelableExtra("filter");
     }
 
     // DataPicker
@@ -37,8 +42,13 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
     // Action Handler
 
     public void onClickClearBtn(View view) {
+        filter.reset();
     }
 
     public void onClickApplyBtn(View view) {
+//        Intent data = new Intent();
+//        setResult(RESULT_OK, data);
+
+        finish();
     }
 }
