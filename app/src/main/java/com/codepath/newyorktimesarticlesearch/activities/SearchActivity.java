@@ -90,9 +90,9 @@ public class SearchActivity extends AppCompatActivity {
         params.put("api-key", API_KEY);
         params.put("page", 0);
         params.put("q", query);
-        params.put("begin_date", filter.getBeginDate());
-        params.put("sort", filter.getSortOrder());
-        params.put("news_desk", filter.getNewsDeskValues());
+        params.put("begin_date", filter.getBeginDateInt());
+        params.put("sort", filter.getSortOrderStr());
+        params.put("news_desk", filter.getNewsDeskValuesStr());
 
         client.get(BASE_URL, params, new JsonHttpResponseHandler() {
             @Override

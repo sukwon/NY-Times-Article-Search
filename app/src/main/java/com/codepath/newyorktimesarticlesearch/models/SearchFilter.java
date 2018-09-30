@@ -72,14 +72,26 @@ public class SearchFilter implements Parcelable {
 
     // Getters
 
-    public int getBeginDate() {
+    public Date getBeginDate() {
+        return beginDate;
+    }
+
+    public SortOrder getSortOrder() {
+        return sortOrder;
+    }
+
+    public ArrayList<NewsDeskValues> getNewsDeskValues() {
+        return newsDeskValues;
+    }
+
+    public int getBeginDateInt() {
         String dateStr = new SimpleDateFormat("yyyy-MM-dd").format(beginDate);
         dateStr = dateStr.replace("-", "");
         int date = Integer.parseInt(dateStr);
         return date;
     }
 
-    public String getSortOrder() {
+    public String getSortOrderStr() {
         String result = "";
         switch (sortOrder) {
             case NEWEST:
@@ -92,7 +104,7 @@ public class SearchFilter implements Parcelable {
         return result;
     }
 
-    public String getNewsDeskValues() {
+    public String getNewsDeskValuesStr() {
         String joined = TextUtils.join(", ", newsDeskValues);
         return "(" + joined + ")";
     }

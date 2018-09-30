@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.codepath.newyorktimesarticlesearch.R;
 import com.codepath.newyorktimesarticlesearch.fragments.DatePickerFragment;
@@ -32,9 +31,28 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         filter = getIntent().getParcelableExtra("filter");
 
         setupSortOrderDropdownMenu();
+
+        updateViewsWithFilter();
     }
 
-    // Dropdown
+    // UI
+
+    private void updateViewsWithFilter() {
+        setBeginDate(filter.getBeginDate());
+        setSortOrder(filter.getSortOrder());
+    }
+
+    // News Desk Values
+
+    // Sort Order
+
+    private void setSortOrder(SearchFilter.SortOrder sortOrder) {
+        AutoCompleteTextView tvSortOrder = findViewById(R.id.acTVSortOrder);
+        ArrayAdapter adapter = (ArrayAdapter) tvSortOrder.getAdapter();
+        tvSortOrder.setAdapter(null);
+        tvSortOrder.setText(sortOrder.toString());
+        tvSortOrder.setAdapter(adapter);
+    }
 
     private void setupSortOrderDropdownMenu() {
         final AutoCompleteTextView acTV = findViewById(R.id.acTVSortOrder);
@@ -42,7 +60,6 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         sortOrders.add(String.valueOf(SearchFilter.SortOrder.NEWEST));
         sortOrders.add(String.valueOf(SearchFilter.SortOrder.OLDEST));
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, sortOrders);
-
         acTV.setAdapter(arrayAdapter);
         acTV.setCursorVisible(false);
         acTV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -50,9 +67,6 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 acTV.showDropDown();
-                String selection = (String) parent.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(), selection,
-                        Toast.LENGTH_SHORT);
             }
         });
 
@@ -64,7 +78,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         });
     }
 
-    // DataPicker
+    // Begin Date
 
     public void showDatePickerDialog(View v) {
         DatePickerFragment newFragment = new DatePickerFragment();
@@ -82,7 +96,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
     }
 
     private void setBeginDate(Date date) {
-        String dateStr = new SimpleDateFormat("dd/MM/yyyy").format(date);
+        String dateStr = new SimpleDateFormat("MM/dd/yyyy").format(date);
         EditText etBeginDate = findViewById(R.id.etBeginDate);
         etBeginDate.setText(dateStr);
     }
