@@ -18,6 +18,7 @@ import android.widget.GridView;
 
 import com.codepath.newyorktimesarticlesearch.R;
 import com.codepath.newyorktimesarticlesearch.adapters.ArticleArrayAdapter;
+import com.codepath.newyorktimesarticlesearch.listeners.EndlessScrollListener;
 import com.codepath.newyorktimesarticlesearch.models.Article;
 import com.codepath.newyorktimesarticlesearch.models.SearchFilter;
 import com.loopj.android.http.AsyncHttpClient;
@@ -76,6 +77,14 @@ public class SearchActivity extends AppCompatActivity {
                 launchArticleActivity(position);
             }
         });
+
+        gvResults.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                fetchArticles(page);
+                return true; // ONLY if more data is actually being loaded; false otherwise.
+            }
+        });
     }
 
     // Action Handler
@@ -83,16 +92,17 @@ public class SearchActivity extends AppCompatActivity {
     public void onArticleSearch(View view) {
         dismissKeyboard();
 
-        String query = etQuery.getText().toString();
-        searchArticle(query);
+        fetchArticles(1);
     }
 
-    private void searchArticle(String query) {
+    // Network
+
+    private void fetchArticles(int page) {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         params.put("api-key", API_KEY);
-        params.put("page", 0);
-        params.put("q", query);
+        params.put("page", page);
+        params.put("q", etQuery.getText().toString());
         params.put("begin_date", filter.getBeginDateInt());
         params.put("sort", filter.getSortOrderStr());
         params.put("news_desk", filter.getNewsDeskValuesStr());
@@ -158,7 +168,7 @@ public class SearchActivity extends AppCompatActivity {
             if (query.isEmpty() == false) {
                 articles.clear();
                 adapter.notifyDataSetChanged();
-                searchArticle(query);
+                fetchArticles(1);
             }
         }
     }
