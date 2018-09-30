@@ -11,9 +11,21 @@ import java.util.Date;
 
 public class SearchFilter implements Parcelable {
 
-    enum SortOrder {
-        OLDEST,
-        NEWEST
+    public enum SortOrder {
+        OLDEST("Oldest"),
+        NEWEST("Newest")
+        ;
+
+        private final String text;
+
+        SortOrder(final String text) {
+            this.text = text;
+        }
+
+        @Override
+        public String toString() {
+            return text;
+        }
     }
 
     public enum NewsDeskValues {
