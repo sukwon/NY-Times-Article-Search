@@ -9,11 +9,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class SearchFilter implements Parcelable {
+public class SearchFilter implements Parcelable, Cloneable {
+
+    public static String id = "searchFilter";
 
     public enum SortOrder {
-        OLDEST("Oldest"),
-        NEWEST("Newest")
+        NEWEST("Newest"),
+        OLDEST("Oldest")
         ;
 
         private final String text;
@@ -25,6 +27,16 @@ public class SearchFilter implements Parcelable {
         @Override
         public String toString() {
             return text;
+        }
+
+        public int getPosition() {
+            if (text.equals(NEWEST.toString())) {
+                return 0;
+            } else if (text.equals(OLDEST.toString())){
+                return 1;
+            } else {
+                return -1;
+            }
         }
     }
 
@@ -58,7 +70,6 @@ public class SearchFilter implements Parcelable {
         reset();
     }
 
-
     public void reset() {
         Date date = new Date();
         Calendar cal = Calendar.getInstance();
@@ -68,6 +79,20 @@ public class SearchFilter implements Parcelable {
 
         sortOrder = SortOrder.NEWEST;
         newsDeskValues = new ArrayList<>();
+    }
+
+    // Setters
+
+    public void setBeginDate(Date beginDate) {
+        this.beginDate = beginDate;
+    }
+
+    public void setSortOrder(SortOrder sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+
+    public void setNewsDeskValues(ArrayList<NewsDeskValues> newsDeskValues) {
+        this.newsDeskValues = newsDeskValues;
     }
 
     // Getters
@@ -139,5 +164,11 @@ public class SearchFilter implements Parcelable {
         dest.writeSerializable(beginDate);
         dest.writeSerializable(sortOrder);
         dest.writeSerializable(newsDeskValues);
+    }
+
+    // Cloneable
+
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

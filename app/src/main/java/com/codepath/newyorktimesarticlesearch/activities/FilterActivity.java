@@ -1,8 +1,10 @@
 package com.codepath.newyorktimesarticlesearch.activities;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,13 +25,19 @@ import java.util.Date;
 public class FilterActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     private SearchFilter filter;
+    private SearchFilter newFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
 
-        filter = getIntent().getParcelableExtra("filter");
+        filter = getIntent().getParcelableExtra(SearchFilter.id);
+        try {
+            newFilter = (SearchFilter) filter.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
 
         setupSortOrderDropdownMenu();
 
@@ -88,7 +96,13 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                acTV.showDropDown();
+                if (position == SearchFilter.SortOrder.OLDEST.getPosition()) {
+                    newFilter.setSortOrder(SearchFilter.SortOrder.OLDEST);
+                } else if (position == SearchFilter.SortOrder.NEWEST.getPosition()) {
+                    newFilter.setSortOrder(SearchFilter.SortOrder.NEWEST);
+                } else {
+                    Log.d("DEBUG", "This can't be happening");
+                }
             }
         });
 
@@ -121,18 +135,49 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         String dateStr = new SimpleDateFormat("MM/dd/yyyy").format(date);
         EditText etBeginDate = findViewById(R.id.etBeginDate);
         etBeginDate.setText(dateStr);
+
+        newFilter.setBeginDate(date);
     }
 
     // Action Handler
 
     public void onClickClearBtn(View view) {
-        filter.reset();
+        newFilter.reset();
+        setBeginDate(newFilter.getBeginDate());
+        setSortOrder(newFilter.getSortOrder());
+        setNewsDeskValues(newFilter.getNewsDeskValues());
     }
 
     public void onClickApplyBtn(View view) {
-//        Intent data = new Intent();
-//        setResult(RESULT_OK, data);
-
+        Intent data = new Intent();
+        data.putExtra(SearchFilter.id, newFilter);
+        setResult(RESULT_OK, data);
         finish();
+    }
+
+    public void onClickArts(View view) {
+        CheckBox cb = (CheckBox) view;
+        handleOnClickNewsDeskValues(cb.isChecked(), SearchFilter.NewsDeskValues.ARTS);
+    }
+
+    public void onClickFashionStyles(View view) {
+        CheckBox cb = (CheckBox) view;
+        handleOnClickNewsDeskValues(cb.isChecked(), SearchFilter.NewsDeskValues.FASHION_AND_STYLES);
+    }
+
+    public void onClickSports(View view) {
+        CheckBox cb = (CheckBox) view;
+        handleOnClickNewsDeskValues(cb.isChecked(), SearchFilter.NewsDeskValues.SPORTS);
+    }
+
+    private void handleOnClickNewsDeskValues(boolean isChecked, SearchFilter.NewsDeskValues newsDeskValues) {
+        ArrayList<SearchFilter.NewsDeskValues> result = filter.getNewsDeskValues();
+        result.remove(newsDeskValues);
+        if (isChecked) {
+            result.add(newsDeskValues);
+        } else {
+            result.remove(newsDeskValues);
+        }
+        newFilter.setNewsDeskValues(result);
     }
 }

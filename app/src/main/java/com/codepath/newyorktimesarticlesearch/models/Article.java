@@ -8,6 +8,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Article implements Serializable {
+
+    public static String id = "article";
+
     private String webUrl;
     private String headline;
     private String thumbnail;

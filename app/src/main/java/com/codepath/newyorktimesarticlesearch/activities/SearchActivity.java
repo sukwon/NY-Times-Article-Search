@@ -84,7 +84,10 @@ public class SearchActivity extends AppCompatActivity {
         dismissKeyboard();
 
         String query = etQuery.getText().toString();
+        searchArticle(query);
+    }
 
+    private void searchArticle(String query) {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         params.put("api-key", API_KEY);
@@ -135,15 +138,29 @@ public class SearchActivity extends AppCompatActivity {
     private void launchArticleActivity(int position) {
         Intent i = new Intent(getApplicationContext(), ArticleActivity.class);
         Article article = articles.get(position);
-        i.putExtra("article", article);
+        i.putExtra(Article.id, article);
         startActivity(i);
     }
 
     private void launchFilterActivity() {
         Intent i = new Intent(this, FilterActivity.class);
-        i.putExtra("filter", filter);
-//        startActivityForResult(i, FILTER_ACTIVITY_REQUEST_CODE);
-        startActivity(i);
+        i.putExtra(SearchFilter.id, filter);
+        startActivityForResult(i, FILTER_ACTIVITY_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == FILTER_ACTIVITY_REQUEST_CODE) {
+            SearchFilter newFilter = (SearchFilter) data.getExtras().get(SearchFilter.id);
+            filter = newFilter;
+
+            String query = etQuery.getText().toString();
+            if (query.isEmpty() == false) {
+                articles.clear();
+                adapter.notifyDataSetChanged();
+                searchArticle(query);
+            }
+        }
     }
 
     // Private Methods

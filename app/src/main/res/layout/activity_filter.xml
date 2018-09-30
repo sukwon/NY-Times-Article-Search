@@ -73,6 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:onClick="onClickArts"
         app:layout_constraintBottom_toBottomOf="@+id/tvNewsDeskValues"
         app:layout_constraintStart_toEndOf="@+id/tvNewsDeskValues"
         app:layout_constraintTop_toTopOf="@+id/tvNewsDeskValues" />
@@ -82,6 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:onClick="onClickFashionStyles"
         app:layout_constraintStart_toStartOf="@+id/cbArts"
         app:layout_constraintTop_toBottomOf="@+id/cbArts" />
 
@@ -90,6 +92,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:onClick="onClickSports"
         app:layout_constraintStart_toStartOf="@+id/cbFashionStyles"
         app:layout_constraintTop_toBottomOf="@+id/cbFashionStyles" />
 
