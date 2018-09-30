@@ -8,14 +8,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.codepath.newyorktimesarticlesearch.R;
 import com.codepath.newyorktimesarticlesearch.fragments.DatePickerFragment;
 import com.codepath.newyorktimesarticlesearch.models.SearchFilter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class FilterActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
@@ -74,6 +77,14 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        setBeginDate(c.getTime());
+    }
+
+    private void setBeginDate(Date date) {
+        String dateStr = new SimpleDateFormat("dd/MM/yyyy").format(date);
+        EditText etBeginDate = findViewById(R.id.etBeginDate);
+        etBeginDate.setText(dateStr);
     }
 
     // Action Handler

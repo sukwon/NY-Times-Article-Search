@@ -55,8 +55,6 @@
         android:layout_width="209dp"
         android:layout_height="wrap_content"
         android:id="@+id/acTVSortOrder"
-        android:hint="Select"
-        android:textAlignment="center"
         android:dropDownHeight="wrap_content"
         android:cursorVisible="false"
         android:maxLines="1"
