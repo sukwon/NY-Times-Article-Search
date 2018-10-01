@@ -55,8 +55,6 @@ public class ArticleActivity extends AppCompatActivity {
 
     // Toolbar
 
-    // Toolbar
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -74,15 +72,4 @@ public class ArticleActivity extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_filter:
-//                launchFilterActivity();
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
 }

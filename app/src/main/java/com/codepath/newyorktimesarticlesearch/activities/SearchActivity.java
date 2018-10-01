@@ -9,8 +9,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -76,12 +74,7 @@ public class SearchActivity extends AppCompatActivity {
         adapter = new ArticleArrayAdapter(this, articles);
         gvResults.setAdapter(adapter);
 
-        gvResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                launchArticleActivity(position);
-            }
-        });
+        gvResults.setOnItemClickListener((parent, view, position, id) -> launchArticleActivity(position));
 
         gvResults.setOnScrollListener(new EndlessScrollListener() {
             @Override
@@ -152,12 +145,9 @@ public class SearchActivity extends AppCompatActivity {
         });
 
         ImageView closeButton = searchView.findViewById(R.id.search_close_btn);
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchView.setQuery("", false);
-                adapter.clear();
-            }
+        closeButton.setOnClickListener(v -> {
+            searchView.setQuery("", false);
+            adapter.clear();
         });
 
 

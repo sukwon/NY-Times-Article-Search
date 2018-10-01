@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
@@ -102,26 +101,17 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, sortOrders);
         acTV.setAdapter(arrayAdapter);
         acTV.setCursorVisible(false);
-        acTV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == SearchFilter.SortOrder.OLDEST.getPosition()) {
-                    newFilter.setSortOrder(SearchFilter.SortOrder.OLDEST);
-                } else if (position == SearchFilter.SortOrder.NEWEST.getPosition()) {
-                    newFilter.setSortOrder(SearchFilter.SortOrder.NEWEST);
-                } else {
-                    Log.d("DEBUG", "This can't be happening");
-                }
+        acTV.setOnItemClickListener((parent, view, position, id) -> {
+            if (position == SearchFilter.SortOrder.OLDEST.getPosition()) {
+                newFilter.setSortOrder(SearchFilter.SortOrder.OLDEST);
+            } else if (position == SearchFilter.SortOrder.NEWEST.getPosition()) {
+                newFilter.setSortOrder(SearchFilter.SortOrder.NEWEST);
+            } else {
+                Log.d("DEBUG", "This can't be happening");
             }
         });
 
-        acTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View arg0) {
-                acTV.showDropDown();
-            }
-        });
+        acTV.setOnClickListener(arg0 -> acTV.showDropDown());
     }
 
     // Begin Date
