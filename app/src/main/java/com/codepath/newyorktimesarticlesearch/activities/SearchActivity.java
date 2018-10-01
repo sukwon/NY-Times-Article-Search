@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.codepath.newyorktimesarticlesearch.R;
@@ -94,6 +95,9 @@ public class SearchActivity extends AppCompatActivity {
     // Network
 
     private void fetchArticles(int page) {
+        if (page == 1) {
+            adapter.clear();
+        }
         SearchView searchView = (SearchView) searchItem.getActionView();
 
         AsyncHttpClient client = new AsyncHttpClient();
@@ -128,7 +132,7 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_filter, menu);
+        inflater.inflate(R.menu.menu_search, menu);
 
         searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
@@ -146,6 +150,16 @@ public class SearchActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        ImageView closeButton = searchView.findViewById(R.id.search_close_btn);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.setQuery("", false);
+                adapter.clear();
+            }
+        });
+
 
         return super.onCreateOptionsMenu(menu);
     }

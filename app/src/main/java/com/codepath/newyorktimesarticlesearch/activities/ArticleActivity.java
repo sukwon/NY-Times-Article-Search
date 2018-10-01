@@ -1,8 +1,15 @@
 package com.codepath.newyorktimesarticlesearch.activities;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -18,7 +25,7 @@ public class ArticleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar_article_activity);
         setSupportActionBar(toolbar);
 
         Article article = (Article) getIntent().getSerializableExtra(Article.id);
@@ -27,7 +34,11 @@ public class ArticleActivity extends AppCompatActivity {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                view.loadUrl(String.valueOf(request.getUrl()));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    view.loadUrl(String.valueOf(request.getUrl()));
+                } else {
+                    //todo
+                }
                 return true;
             }
         });
@@ -42,4 +53,36 @@ public class ArticleActivity extends AppCompatActivity {
         }
     }
 
+    // Toolbar
+
+    // Toolbar
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_article, menu);
+
+        MenuItem item = menu.findItem(R.id.menu_item_share);
+        ShareActionProvider miShare = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+
+        WebView wvArticle = findViewById(R.id.wvArticle);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, wvArticle.getUrl());
+
+        miShare.setShareIntent(shareIntent);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.action_filter:
+//                launchFilterActivity();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
 }
