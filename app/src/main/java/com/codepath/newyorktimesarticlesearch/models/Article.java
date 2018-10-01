@@ -9,11 +9,15 @@ import java.util.ArrayList;
 
 public class Article implements Serializable {
 
+    public enum DisplayStyle {
+        IMAGE_AND_TEXT, TEXT
+    }
     public static String id = "article";
 
     private String webUrl;
     private String headline;
     private String thumbnail;
+    public DisplayStyle displayStyle;
 
     public String getWebUrl() {
         return webUrl;
@@ -39,6 +43,8 @@ public class Article implements Serializable {
             } else  {
                 this.thumbnail = "";
             }
+
+            this.displayStyle = thumbnail.isEmpty() ? DisplayStyle.TEXT : DisplayStyle.IMAGE_AND_TEXT;
         } catch (JSONException e) {
             e.printStackTrace();
         }
