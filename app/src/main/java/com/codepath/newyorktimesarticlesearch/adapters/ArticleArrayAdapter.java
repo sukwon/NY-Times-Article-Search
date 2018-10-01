@@ -11,9 +11,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.codepath.newyorktimesarticlesearch.R;
 import com.codepath.newyorktimesarticlesearch.models.Article;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -72,7 +72,7 @@ public class ArticleArrayAdapter extends ArrayAdapter<Article> {
             viewHolder.tvTitle.setText(article.getHeadline());
 
             String thumbnail = article.getThumbnail();
-            Picasso.with(getContext()).load(thumbnail).into(viewHolder.ivImage);
+            Glide.with(getContext()).load(thumbnail).into(viewHolder.ivImage);
         } else {
             Log.d("DEBUG", "This can't be happened.");
         }
