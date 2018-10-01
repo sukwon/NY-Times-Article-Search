@@ -1,19 +1,16 @@
 package com.codepath.newyorktimesarticlesearch.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -41,9 +38,8 @@ public class SearchActivity extends AppCompatActivity {
     private static String API_KEY = "6475b9261bb44f24a931b9088cc1c8d7";
     private final int FILTER_ACTIVITY_REQUEST_CODE = 20;
 
-    EditText etQuery;
     GridView gvResults;
-    Button btnSearch;
+    MenuItem searchItem;
 
     private ArrayList<Article> articles;
     private ArticleArrayAdapter adapter;
@@ -75,9 +71,7 @@ public class SearchActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar_search_activity);
         setSupportActionBar(toolbar);
 
-        etQuery = findViewById(R.id.etQuery);
         gvResults = findViewById(R.id.gvResults);
-        btnSearch = findViewById(R.id.btnSearch);
         adapter = new ArticleArrayAdapter(this, articles);
         gvResults.setAdapter(adapter);
 
@@ -97,22 +91,16 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    // Action Handler
-
-    public void onArticleSearch(View view) {
-        dismissKeyboard();
-
-        fetchArticles(1);
-    }
-
     // Network
 
     private void fetchArticles(int page) {
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         params.put("api-key", API_KEY);
         params.put("page", page);
-        params.put("q", etQuery.getText().toString());
+        params.put("q", searchView.getQuery().toString());
         params.put("begin_date", filter.getBeginDateInt());
         params.put("sort", filter.getSortOrderStr());
         params.put("news_desk", filter.getNewsDeskValuesStr());
@@ -141,7 +129,25 @@ public class SearchActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_filter, menu);
-        return true;
+
+        searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                fetchArticles(1);
+                searchView.clearFocus();
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -176,19 +182,13 @@ public class SearchActivity extends AppCompatActivity {
             SearchFilter newFilter = (SearchFilter) data.getExtras().get(SearchFilter.id);
             filter = newFilter;
 
-            String query = etQuery.getText().toString();
+            SearchView searchView = (SearchView) searchItem.getActionView();
+            String query = searchView.getQuery().toString();
             if (query.isEmpty() == false) {
                 articles.clear();
                 adapter.notifyDataSetChanged();
                 fetchArticles(1);
             }
         }
-    }
-
-    // Private Methods
-
-    private void dismissKeyboard() {
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(etQuery.getWindowToken(), 0);
     }
 }
