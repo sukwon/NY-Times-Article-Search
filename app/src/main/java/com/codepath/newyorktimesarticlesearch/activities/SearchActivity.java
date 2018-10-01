@@ -15,9 +15,11 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.codepath.newyorktimesarticlesearch.R;
 import com.codepath.newyorktimesarticlesearch.adapters.ArticleArrayAdapter;
+import com.codepath.newyorktimesarticlesearch.helper.Util;
 import com.codepath.newyorktimesarticlesearch.listeners.EndlessScrollListener;
 import com.codepath.newyorktimesarticlesearch.models.Article;
 import com.codepath.newyorktimesarticlesearch.models.SearchFilter;
@@ -54,6 +56,14 @@ public class SearchActivity extends AppCompatActivity {
 
         setupModels();
         setupViews();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Util.isOnline() == false) {
+            Toast.makeText(this, getString(R.string.no_internet_connection), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void setupModels() {
@@ -118,6 +128,8 @@ public class SearchActivity extends AppCompatActivity {
                     adapter.addAll(Article.fromJSONArray(articleJsonResults));
                 } catch (JSONException e) {
                     e.printStackTrace();
+
+                    Util.showNetworkFailure(SearchActivity.this);
                 }
             }
         });

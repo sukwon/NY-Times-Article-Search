@@ -6,8 +6,10 @@ import android.support.v7.widget.Toolbar;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import com.codepath.newyorktimesarticlesearch.R;
+import com.codepath.newyorktimesarticlesearch.helper.Util;
 import com.codepath.newyorktimesarticlesearch.models.Article;
 
 public class ArticleActivity extends AppCompatActivity {
@@ -30,6 +32,14 @@ public class ArticleActivity extends AppCompatActivity {
             }
         });
         wv.loadUrl(article.getWebUrl());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Util.isOnline() == false) {
+            Toast.makeText(this, getString(R.string.no_internet_connection), Toast.LENGTH_LONG).show();
+        }
     }
 
 }

@@ -12,9 +12,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.codepath.newyorktimesarticlesearch.R;
 import com.codepath.newyorktimesarticlesearch.fragments.DatePickerFragment;
+import com.codepath.newyorktimesarticlesearch.helper.Util;
 import com.codepath.newyorktimesarticlesearch.models.SearchFilter;
 
 import java.text.SimpleDateFormat;
@@ -42,6 +44,14 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         setupSortOrderDropdownMenu();
 
         updateViewsWithFilter();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Util.isOnline() == false) {
+            Toast.makeText(this, getString(R.string.no_internet_connection), Toast.LENGTH_LONG).show();
+        }
     }
 
     // UI
